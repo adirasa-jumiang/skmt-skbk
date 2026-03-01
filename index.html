@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+<script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
 <title>Penilaian SKMT PTK</title>
 
 <style>
@@ -15,7 +17,7 @@ body{
 .container{
     max-width:1000px;
     margin:30px auto;
-    background:white;
+    background: white;
     border-radius:10px;
     box-shadow:0 5px 15px rgba(0,0,0,0.1);
     overflow:hidden;
@@ -52,6 +54,12 @@ body{
     width: 70%;
     height: 20%;
     text-align: center;
+}
+#nilaiA{
+    height: 100%;
+}
+#nilaiB{
+    height: 100%;
 }
 .jtm{
     background:#e7f2f2;
@@ -114,6 +122,11 @@ button{
 .btn-upload input{
     display:none;
 }
+
+.btn-tutorial{
+    color: white;
+    background: red;
+}
 /* RESPONSIVE MODE HP */
 @media (max-width: 768px){
 
@@ -147,6 +160,9 @@ button{
 <div class="container">
 
 <div class="header">
+<center><button onclick="startTour()" class="btn-tutorial">
+Panduan Penggunaan
+</button></center>
 <h2>Penilaian SKMT PTK</h2>
 <p>SKMT untuk periode Th. Ajaran 2025/2026, semester 2</p>
 
@@ -155,14 +171,14 @@ button{
 <div class="profile-left">
 <img id="fotoPreview" src="https://via.placeholder.com/90x110">
 <div class="data">
-<label class="btn-upload">
+<label class="btn-upload" data-intro="Upload foto guru di sini" data-step="2">
     Pilih Foto PTK/Guru jika Ada
     <input type="file" accept="image/*" onchange="previewFoto(event)">
 </label><br><br>
 <!-- <input type="file" accept="image/*" onchange="previewFoto(event)"><br><br> -->
-<input type="text" id="nama" placeholder="Masukkan Nama PTK disini" ><br><br>
+<input type="text" id="nama" placeholder="Nama PTK/Guru" data-intro="Langkah 1️⃣ Isi Nama Guru terlebih dahulu disini." data-step="1"><br><br>
 
-<font style="color: #f44336;"> Tambah pilih foto (jika ada) pada form diatas!</font>
+<font style="color: #f44336;"> Masukkan Nama dan upload foto pada form diatas *</font>
 <!-- <select id="jabatan">
 <option>Guru</option>
 <option>Kepala Sekolah</option>
@@ -207,7 +223,7 @@ mengevaluasi dan menilai hasil pembelajaran.
 </td>
 
 <td>
-<select id="jabatanA">
+<select id="jabatanA" data-intro="Langkah 2️⃣ Pilih Jabatan pada bagian A dan B." data-step="3">
 <option>Guru Kelas</option>
 <option>Guru Agama</option>
 <option>Guru Olahraga</option>
@@ -219,7 +235,7 @@ mengevaluasi dan menilai hasil pembelajaran.
 </td>
 
 <td>
-<input type="number" id="nilaiA" oninput="hitungBaris('A')">
+<input type="number" id="nilaiA" oninput="hitungBaris('A')" data-intro="Masukkan nilai A dan B sesuai penilaian" data-step="4">
 </td>
 
 <td id="katA">-</td>
@@ -255,8 +271,8 @@ Tugas tambahan yang relevan dengan fungsi pendidikan madrasah.
 </div>
 
 <div class="footer">
-<button class="btn-save" onclick="simpan()">Simpan</button>
-<button class="btn-wa" onclick="kirimWA()">Kirim WA</button>
+<button class="btn-save" onclick="simpan()" data-intro="Langkah 3️⃣ Klik tombol Simpan untuk menyimpan data. Ulangi sampai semua guru selesai." data-step="5">Simpan</button>
+<button class="btn-wa" onclick="kirimWA()" data-intro="Langkah 4️⃣ Klik Kirim WA untuk mengirim laporan ke WhatsApp." data-step="6">Kirim WA</button>
 </div>
 
 <div class="list" id="dataList">
@@ -568,5 +584,16 @@ tampil();
 
 </script>
 
+<script>
+function startTour() {
+    introJs().setOptions({
+        nextLabel: 'Lanjut ➡',
+        prevLabel: '⬅ Kembali',
+        doneLabel: 'Selesai ✅',
+        showProgress: true,
+        showBullets: false
+    }).start();
+}
+</script>
 </body>
 </html>
