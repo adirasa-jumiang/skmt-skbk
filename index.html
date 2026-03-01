@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penilaian SKMT PTK</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f2f2;
+    margin:0;
+}
+.container{
+    max-width:1000px;
+    margin:30px auto;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    overflow:hidden;
+}
+.header{
+    padding:20px;
+    background:#f7f7f7;
+    border-bottom:1px solid #ddd;
+}
+.profile{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+.profile-left{
+    display:flex;
+    gap:15px;
+}
+.profile-left img{
+    width:90px;
+    height:110px;
+    object-fit:cover;
+    border-radius:5px;
+    border:1px solid #ddd;
+}
+.data span{
+    display:block;
+    font-size:14px;
+    margin-bottom:4px;
+}
+.jtm{
+    background:#e7f2f2;
+    padding:15px;
+    border-radius:5px;
+    width:250px;
+}
+.form-section{
+    padding:20px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+th{
+    background:#f0f0f0;
+}
+input[type=number]{
+    width:80px;
+}
+.footer{
+    background:#dbe7ef;
+    padding:15px;
+    text-align:right;
+}
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    margin-left:5px;
+}
+.btn-save{ background:#4CAF50;color:white;}
+.btn-wa{ background:#25D366;color:white;}
+.btn-del{ background:#f44336;color:white;}
+.list{
+    padding:20px;
+}
+.item{
+    border:1px solid #ddd;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:5px;
+}
+
+.btn-upload{
+    display:inline-block;
+    padding:8px 15px;
+    background:#06784f;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.btn-upload input{
+    display:none;
+}
+/* RESPONSIVE MODE HP */
+@media (max-width: 768px){
+
+    .profile{
+        display: flex;
+        flex-wrap: wrap;
+        /* flex-direction: column; */
+        gap:20px;
+    }
+
+    .profile-left{
+        flex-direction: column;
+        align-items: center;
+        text-align:center;
+    }
+
+    .jtm{
+        flex: 1 1 250px;
+        width:100%;
+    }
+
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h2>Penilaian SKMT PTK</h2>
+<p>SKMT untuk periode Th. Ajaran 2025/2026, semester 2</p>
+
+<div class="profile">
+
+<div class="profile-left">
+<img id="fotoPreview" src="https://via.placeholder.com/90x110">
+<div class="data">
+<label class="btn-upload">
+    Pilih Foto PTK/Guru jika Ada
+    <input type="file" accept="image/*" onchange="previewFoto(event)">
+</label><br><br>
+<!-- <input type="file" accept="image/*" onchange="previewFoto(event)"><br><br> -->
+<input type="text" id="nama" placeholder="Nama PTK/Guru" ><br><br>
+
+<font style="color: #f44336;"> Masukkan Nama dan upload foto pada form diatas *</font>
+<!-- <select id="jabatan">
+<option>Guru</option>
+<option>Kepala Sekolah</option>
+<option>Wali Kelas</option>
+<option>Guru BK</option>
+<option>Operator</option>
+</select> -->
+
+</div>
+</div>
+
+<div class="jtm">
+<h4>Perhitungan JTM</h4>
+<div>Linier : 0</div>
+<div>Non Linier : 0</div>
+<div>Jabatan : 0</div>
+<div>Total : <span id="totalNilai">0</span></div>
+</div>
+
+</div>
+</div>
+
+<div class="form-section">
+
+<h3>FORMULIR PENILAIAN KINERJA</h3>
+
+<table>
+<tr>
+<th>No</th>
+<th>Uraian</th>
+<th>Jabatan</th>
+<th>Nilai</th>
+<th>Kategori</th>
+</tr>
+
+<tr>
+<td>A</td>
+<td>
+<b>Melaksanakan Proses Pembelajaran</b><br>
+Merencanakan dan melaksanakan pembelajaran,
+mengevaluasi dan menilai hasil pembelajaran.
+</td>
+
+<td>
+<select id="jabatanA">
+<option>Guru Kelas</option>
+<option>Guru Agama</option>
+<option>Guru Olahraga</option>
+<option>Guru BK</option>
+<option>Guru Bahasa</option>
+<option>Guru MTK</option>
+<option>Guru TIK</option>
+</select>
+</td>
+
+<td>
+<input type="number" id="nilaiA" oninput="hitungBaris('A')">
+</td>
+
+<td id="katA">-</td>
+</tr>
+
+<tr>
+<td>B</td>
+<td>
+<b>Melaksanakan Tugas Tertentu</b><br>
+Tugas tambahan yang relevan dengan fungsi pendidikan madrasah.
+</td>
+
+<td>
+<select id="jabatanB">
+<option>Kepala Sekolah</option>
+<option>Wakil Kepala</option>
+<option>Wali Kelas</option>
+<option>TU</option>
+<option>Operator</option>
+<option>Tidak ada</option>
+</select>
+</td>
+
+<td>
+<input type="number" id="nilaiB" oninput="hitungBaris('B')">
+</td>
+
+<td id="katB">-</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="footer">
+<button class="btn-save" onclick="simpan()">Simpan</button>
+<button class="btn-wa" onclick="kirimWA()">Kirim WA</button>
+</div>
+
+<div class="list" id="dataList">
+<h3>Data Tersimpan</h3>
+</div>
+
+</div>
+
+<script>
+
+let fotoBase64="";
+let editId = null;
+
+function previewFoto(e){
+let reader=new FileReader();
+reader.onload=function(){
+fotoBase64=reader.result;
+document.getElementById("fotoPreview").src=fotoBase64;
+}
+reader.readAsDataURL(e.target.files[0]);
+}
+
+function kategori(nilai){
+if(nilai>=90) return "Sangat Baik";
+if(nilai>=75) return "Baik";
+if(nilai>=60) return "Cukup";
+if(nilai>0) return "Kurang";
+return "-";
+}
+
+//function hitungTotal(){
+//let a=parseInt(nilaiA.value)||0;
+//let b=parseInt(nilaiB.value)||0;
+//let total=a+b;
+
+//katA.innerText=kategori(a);
+//katB.innerText=kategori(b);
+//totalNilai.innerText=total;
+
+//return total;
+//}
+
+//function simpan(){
+
+//let data={
+//id:Date.now(),
+//nama:nama.value,
+//jabatan:jabatan.value,
+//nilaiA:nilaiA.value,
+//nilaiB:nilaiB.value,
+//total:hitungTotal(),
+//foto:fotoBase64
+//};
+
+//let list=JSON.parse(localStorage.getItem("skmt"))||[];
+//list.push(data);
+//localStorage.setItem("skmt",JSON.stringify(list));
+
+//alert("Data disimpan!");
+//tampil();
+//}
+function kategori(nilai){
+if(nilai>=90) return "Sangat Baik";
+if(nilai>=75) return "Baik";
+if(nilai>=60) return "Cukup";
+if(nilai>0) return "Kurang";
+return "-";
+}
+
+function hitungBaris(huruf){
+
+let nilai = parseInt(document.getElementById("nilai"+huruf).value) || 0;
+document.getElementById("kat"+huruf).innerText = kategori(nilai);
+
+hitungTotal();
+}
+
+function hitungTotal(){
+let a=parseInt(nilaiA.value)||0;
+let b=parseInt(nilaiB.value)||0;
+totalNilai.innerText = a+b;
+}
+
+function simpan(){
+
+let data={
+id: editId ? editId : Date.now(),
+nama:nama.value,
+foto:fotoBase64,
+
+A:{
+jabatan:jabatanA.value,
+nilai:nilaiA.value,
+kategori:katA.innerText
+},
+
+B:{
+jabatan:jabatanB.value,
+nilai:nilaiB.value,
+kategori:katB.innerText
+},
+
+total:totalNilai.innerText
+};
+
+let list=JSON.parse(localStorage.getItem("skmt"))||[];
+
+if(editId){
+list = list.map(d => d.id === editId ? data : d);
+editId = null;
+}else{
+list.push(data);
+}
+
+localStorage.setItem("skmt",JSON.stringify(list));
+
+alert("Data berhasil disimpan!");
+resetForm();
+tampil();
+}
+//function simpan(){
+
+//let data={
+//id:Date.now(),
+//nama:nama.value,
+//foto:fotoBase64,
+
+//A:{
+//jabatan:jabatanA.value,
+//nilai:nilaiA.value,
+//kategori:katA.innerText
+//},
+
+//B:{
+//jabatan:jabatanB.value,
+//nilai:nilaiB.value,
+//kategori:katB.innerText
+//},
+
+//total:totalNilai.innerText
+//};
+
+//let list=JSON.parse(localStorage.getItem("skmt"))||[];
+//list.push(data);
+//localStorage.setItem("skmt",JSON.stringify(list));
+
+//alert("Data berhasil disimpan!");
+//tampil();
+//}
+function editData(id){
+
+let list=JSON.parse(localStorage.getItem("skmt"))||[];
+let data=list.find(d=>d.id===id);
+
+editId=id;
+
+nama.value=data.nama;
+fotoPreview.src=data.foto;
+fotoBase64=data.foto;
+
+jabatanA.value=data.A.jabatan;
+nilaiA.value=data.A.nilai;
+katA.innerText=data.A.kategori;
+
+jabatanB.value=data.B.jabatan;
+nilaiB.value=data.B.nilai;
+katB.innerText=data.B.kategori;
+
+totalNilai.innerText=data.total;
+
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resetForm(){
+nama.value="";
+nilaiA.value="";
+nilaiB.value="";
+katA.innerText="-";
+katB.innerText="-";
+totalNilai.innerText="0";
+fotoPreview.src="https://via.placeholder.com/90x110";
+fotoBase64="";
+}
+//function tampil(){
+//let list=JSON.parse(localStorage.getItem("skmt"))||[];
+//let html="";
+//list.forEach(d=>{
+//html+=`
+//<div class="item">
+//<img src="${d.foto}" width="60">
+//<b>${d.nama}</b><br>
+//Jabatan: ${d.jabatan}<br>
+//Total: ${d.total}<br><br>
+//<button class="btn-del" onclick="hapus(${d.id})">Hapus</button>
+//</div>
+//`;
+//});
+//dataList.innerHTML="<h3>Data Tersimpan</h3>"+html;
+//}
+
+function tampil(){
+
+let list=JSON.parse(localStorage.getItem("skmt"))||[];
+let html="";
+
+list.forEach(d=>{
+html+=`
+<div class="item">
+<input type="checkbox" class="cekData" value="${d.id}">
+<img src="${d.foto}" width="60"><br>
+<b>${d.nama}</b><br><br>
+
+<b>A</b> - ${d.A.jabatan} | Nilai: ${d.A.nilai} | ${d.A.kategori}<br>
+<b>B</b> - ${d.B.jabatan} | Nilai: ${d.B.nilai} | ${d.B.kategori}<br><br>
+
+Total: ${d.total}<br><br>
+
+<button onclick="editData(${d.id})">Edit</button>
+<button class="btn-del" onclick="hapus(${d.id})">Hapus</button>
+</div>
+`;
+});
+
+dataList.innerHTML="<h3>Data Tersimpan</h3>"+html;
+}
+
+//function tampil(){
+
+//let list=JSON.parse(localStorage.getItem("skmt"))||[];
+//let html="";
+
+//list.forEach(d=>{
+//html+=`
+//<div class="item">
+//<img src="${d.foto}" width="60"><br>
+//<b>${d.nama}</b><br><br>
+
+//<b>A</b><br>
+//Jabatan: ${d.A.jabatan}<br>
+//Nilai: ${d.A.nilai}<br>
+//Kategori: ${d.A.kategori}<br><br>
+
+//<b>B</b><br>
+//Jabatan: ${d.B.jabatan}<br>
+//Nilai: ${d.B.nilai}<br>
+//Kategori: ${d.B.kategori}<br><br>
+
+//Total: ${d.total}<br><br>
+
+//<button class="btn-del" onclick="hapus(${d.id})">Hapus</button>
+//</div>
+//`;
+//});
+
+//dataList.innerHTML="<h3>Data Tersimpan</h3>"+html;
+//}
+
+function hapus(id){
+let list=JSON.parse(localStorage.getItem("skmt"))||[];
+list=list.filter(d=>d.id!==id);
+localStorage.setItem("skmt",JSON.stringify(list));
+tampil();
+}
+
+//function kirimWA(){
+//let pesan=`*Laporan SKMT PTK*%0A
+//Nama: ${nama.value}%0A
+//Jabatan: ${jabatan.value}%0A
+//Total Nilai: ${totalNilai.innerText}`;
+
+//let nomor="6282140920244"; // ganti nomor WA
+//window.open(`https://wa.me/${nomor}?text=${pesan}`);
+//}
+function kirimWA(){
+
+let list=JSON.parse(localStorage.getItem("skmt"))||[];
+let checkbox=document.querySelectorAll(".cekData:checked");
+
+let dataKirim=[];
+
+if(checkbox.length>0){
+checkbox.forEach(c=>{
+let data=list.find(d=>d.id==c.value);
+dataKirim.push(data);
+});
+}else{
+dataKirim=list;
+}
+
+if(dataKirim.length===0){
+alert("Tidak ada data untuk dikirim!");
+return;
+}
+
+let pesan="*LAPORAN SKMT PTK*%0A%0A";
+
+dataKirim.forEach((d,i)=>{
+pesan+=`${i+1}. ${d.nama}%0A`;
+pesan+=`A: ${d.A.jabatan} - ${d.A.nilai} (${d.A.kategori})%0A`;
+pesan+=`B: ${d.B.jabatan} - ${d.B.nilai} (${d.B.kategori})%0A`;
+pesan+=`Total: ${d.total}%0A%0A`;
+});
+
+let nomor="6282140920244"; // GANTI NOMOR
+window.open(`https://wa.me/${nomor}?text=${pesan}`);
+}
+
+tampil();
+
+</script>
+
+</body>
+</html>
